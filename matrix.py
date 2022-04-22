@@ -23,9 +23,7 @@ class Matrix(object):
                 if i == cr or j == cr:
                     self.matrix[i][j] = 0
         self.sumRows = np.sum(self.matrix, axis=1).tolist()
-
-    def get_intersection_rows(self):
-        return []
+        self.is_deleted[cr] = True
 
     def get_deltas(self, arr: np.array) -> dict:
         res = {}
