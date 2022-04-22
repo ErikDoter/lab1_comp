@@ -31,7 +31,7 @@ class Matrix(object):
     def min_by_sum(self) -> int:
         return np.argmin(self.sumRows)
 
-    def get_intesection_row(self, row) -> np.array:
+    def get_intesection_row(self, row: int) -> np.array:
         res = np.array([row])
         for i, _ in self.matrix[row]:
             if self.matrix[row][i] != 0:
@@ -39,14 +39,20 @@ class Matrix(object):
         
         return res
 
+    def get_intersection_rows_rows(self, rows: np.array, count: int) -> np.array:
+        res = []
+        for i in rows:
+            res = np.append(res, self.get_intesection_row(i))
+        res = np.unique(res)
+        res = np.delete(res, rows)
+        return res
+
+
 
     def print_matrix(self):
         print(f'Матрица:\n {self.matrix}\n\n\n Сумма строк:\n {self.sumRows}\n\n\n\n Непонятная хрень строк:\n {self.deltaRows}')
 
         
 
-matrix = Matrix('test50.txt')
-for mat in matrix.matrix:
-    for m in mat:
-        print()
+matrix = Matrix('test20.txt')
 print(matrix.print_matrix())
