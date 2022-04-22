@@ -32,10 +32,10 @@ class Matrix(object):
         return np.argmin(self.sumRows)
 
     def get_intesection_row(self, row) -> np.array:
-        res = np.empty((0))
+        res = np.array([row])
         for i, _ in self.matrix[row]:
             if self.matrix[row][i] != 0:
-                res = np.append(res, self.matrix[row][i])
+                res = np.append(res, i)
         
         return res
 
