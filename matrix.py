@@ -72,10 +72,16 @@ class Matrix(object):
         for r in rows:
             res = np.delete(res, np.argwhere(res == r))
         if len(res) < count:
-            res = np.append(res, self.get_intersection_rows_rows(np.append(rows,res).astype(int), count - len(res)))
+            if len(res) == 0:
+                for index, value in enumerate(self.is_deleted):
+                    if not value and index not in res and index not in rows and len(res) < count:
+                        res = np.append(res, index)
+            else:
+                res = np.append(res, self.get_intersection_rows_rows(np.append(rows,res).astype(int), count - len(res)))
         elif len(res) > count:
             res = res[:count]
         return res
+
 
 
 

@@ -3,8 +3,6 @@ from tkinter import N
 from typing import List
 from numpy import rec
 
-from pyrsistent import b
-
 
 def rec3(s:int, l: List[int]):
     res = []
@@ -25,9 +23,6 @@ def rec3(s:int, l: List[int]):
         while sum(r) < s:
             r.append(lm[-1])
         if sum(r) == s and r not in res:
-            print(r)
-            print(f'l={l}')
-            print(f'lm={lm}')
             res.append(r)
             return
         r.pop()
@@ -55,7 +50,6 @@ def rec(s: int, init_l: List[int]):
                     r.sort()
                     if r not in res:
                         res.append(r)
-                        print(len(res))
         elif sum_buf == s:
             #print('=', b)
             return b
@@ -64,7 +58,5 @@ def rec(s: int, init_l: List[int]):
     init_l.sort(reverse=True)
     rec2(s=s, init_l=init_l)
     return res
-            
-        
-print('res=',rec(20, [3,4,5,7]))
+
 
