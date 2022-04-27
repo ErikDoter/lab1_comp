@@ -1,9 +1,10 @@
+from copy import copy
 from pathlib import Path
-from re import S
 import numpy as np
 from typing import List
 
 class Matrix(object):
+    init_matrix: np.matrix
     matrix: np.matrix
     sumRows: np.array
     deltaRows: np.array
@@ -11,6 +12,7 @@ class Matrix(object):
 
     def __init__(self, file: Path) -> None:
         self.matrix = np.loadtxt(file, delimiter=', ')
+        self.init_matrix = copy(self.matrix)
         self.sumRows = np.sum(self.matrix,axis=1).tolist()
         self.deltaRows = np.array([])
         self.is_deleted = []
@@ -81,6 +83,15 @@ class Matrix(object):
         elif len(res) > count:
             res = res[:count]
         return res
+
+    def get_q(self, ll):
+        q = 0
+        for l in ll:
+            for el in l:
+                q += np.sum(self.init_matrix[el])
+                for e in l:
+                    q -= self.init_matrix[el][e]
+        return q                    
 
 
 
