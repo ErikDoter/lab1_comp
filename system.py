@@ -2,6 +2,8 @@ from typing import List
 from matrix import Matrix
 from pathlib import Path
 import numpy as np
+from utils import recursion
+from copy import copy
 
 
 class System:
@@ -10,7 +12,7 @@ class System:
 
     def __init__(self):
         self.init_values = {
-            "test20.txt": [3,3,4,5,5],
+            "test20.txt": [3,4,5,7],
             "test50.txt": [10,13,15,17],
             "test101.txt": [3,4,5,7,11],
             "test250.txt": [45,55,70,80],
@@ -27,6 +29,10 @@ class System:
 
     def run(self):
         containers = self.init_values["test20.txt"]
+        print(containers)
+        containers = recursion(20, copy(containers))
+        containers.sort()
+        print(containers)
         while not all(self.matrix.is_deleted):
             min_element = self.matrix.min_by_sum()
             delete_cols = self.matrix.get_intesection_row(min_element)

@@ -14,9 +14,6 @@ def recursion(s:int, l: List[int], r=[], lm=[]) -> List[int] :
                 if i < rofl:
                     lm.append(i)
 
-    print(r)
-    print(lm)
-    print(l)
     lm.sort()
     i = 0 
     while sum(r) < s:
@@ -28,4 +25,3 @@ def recursion(s:int, l: List[int], r=[], lm=[]) -> List[int] :
     lm.pop()
     return recursion(s=s, l=l, r=r, lm=lm)
 
-print(recursion(250, [45,55,70,80]))
