@@ -78,6 +78,19 @@ class System:
             print(c)
 
 
+    def get_best_container(self):
+        min = 100000
+        min_container = []
+        for c in self.result_containers:
+            q = self.matrix.get_q(c)
+            print('q = ', q)
+            if q < min:
+                min = q
+                min_container = copy(c)
+        print('min = ', min)
+        return min_container
+
+
 
 
 

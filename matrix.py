@@ -88,9 +88,9 @@ class Matrix(object):
         q = 0
         for l in ll:
             for el in l:
-                q += np.sum(self.init_matrix[el])
+                q += np.sum(self.init_matrix[int(el)])
                 for e in l:
-                    q -= self.init_matrix[el][e]
+                    q -= self.init_matrix[int(el)][int(e)]
         return q                    
 
 
