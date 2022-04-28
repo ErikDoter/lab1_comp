@@ -96,4 +96,28 @@ class Step2:
         for p in self.plata:
             print(p)
 
+    def get_q(self):
+        q = 0
+        for index_row, row in enumerate(self.matrix):
+            for index_col, col in enumerate(self.matrix):
+                massa = self.matrix[index_row][index_col]
+                x_coord1 = 0
+                y_coord1 = 0
+                x_coord2 = 0
+                y_coord2 = 0
+                for index_row2, row2 in enumerate(self.plata):
+                    for index_col2, col2 in enumerate(self.plata):
+                        if self.plata[index_row2][index_col2] == index_row:
+                            x_coord1 = index_col2
+                            y_coord1 = index_row2
+                for index_row3, row3 in enumerate(self.plata):
+                    for index_col3, col3 in enumerate(self.plata):
+                        if self.plata[index_row3][index_col3] == index_col:
+                            x_coord2 = index_col3
+                            y_coord2 = index_row3
+                s = math.fabs(x_coord1 - x_coord2) + math.fabs(y_coord1 - y_coord2)
+                q += s * massa
+        return q/2
+
+
 
