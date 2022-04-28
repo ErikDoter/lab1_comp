@@ -13,13 +13,14 @@ class System:
 
     def __init__(self):
         self.init_values = {
+            "test8.txt": [8, [2,3]],
             "test20.txt": [20, [3,4,5,7]],
             "test50.txt": [50, [10,13,15,17]],
             "test250.txt": [250, [45,55,70,80]],
             "test1000.txt": [1000, [100,100,100,125,175,175,225]],
             #"test10000.txt": [2000, 2500, 2500, 3000]
         }
-        self.matrix = Matrix(Path('test20.txt'))
+        self.matrix = Matrix(Path(FILE))
         self.result_containers = []
 
 

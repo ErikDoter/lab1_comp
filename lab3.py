@@ -1,5 +1,13 @@
 from system import System
+from step2 import Step2
 
 system = System()
 system.run()
-print('best container = ', system.get_best_container())
+best_container = system.get_best_container()
+
+FILE = "test20.txt"
+layout = Step2(FILE, best_container)
+layout.create_containers_matrix()
+layout.print_matrix()
+layout.prepare_plata()
+layout.run()

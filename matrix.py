@@ -91,7 +91,15 @@ class Matrix(object):
                 q += np.sum(self.init_matrix[int(el)])
                 for e in l:
                     q -= self.init_matrix[int(el)][int(e)]
-        return q                    
+        return q
+
+    def get_container_intersection(self, container1, container2):
+        summa = 0
+        for i1, c1 in enumerate(container1):
+            for i2, c2 in enumerate(container2):
+                summa += self.matrix[int(c1)][int(c2)]
+        return int(summa)
+
 
 
 
