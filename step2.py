@@ -1,5 +1,7 @@
+from copy import copy
+from hashlib import new
 from operator import isub
-from numpy import mat
+from numpy import append, mat
 from matrix import Matrix
 from pathlib import Path
 from typing import List
@@ -70,7 +72,7 @@ class Step2:
             k.append(k_result)
         self.k_arrays.append(k)
 
-        max_k = -10
+        max_k = -100000
         for key in k:
             if key != '*' and key > max_k:
                 max_k = key
@@ -140,11 +142,11 @@ class Step2:
         return sum_q_for_el
         
     
-    def count_lv(self): #счтает lv для всез элементов
-        for i, row in enumerate(self.plata):
+    def count_lv(self, plata, s = ''): #счтает lv для всез элементов
+        for i, row in enumerate(plata):
             for j, col in enumerate(row):
                 self.lv[col] = (1/self.p_sums[col]) * self.get_q_elem(col)
-        print('lv:', self.lv)
+        print(f'lv {s}:', self.lv)
 
     def get_max_lv(self):
         m = max(self.lv)
@@ -198,18 +200,52 @@ class Step2:
         for p in self.plata:
             print(p)
         
-        self.count_lv()
+        flag = True
 
-        m_i = self.get_max_lv()
-        print('max_lv_index:', m_i)
-        x_v = (1/self.p_sums[m_i]) * self.get_q_elem_x(m_i)
-        y_v = (1/self.p_sums[m_i]) * self.get_q_elem_y(m_i)
-        print('x_v=', x_v, 'y_v=', y_v)
-        cord_max_lv = list(self.get_index_in_plata(m_i))
-        x_offset = cord_max_lv[1] + x_v
-        y_offset = cord_max_lv[0] + y_v
-        list_to_swap = self.get_list_to_swap([y_offset, x_offset], cord_max_lv)
-        print(list_to_swap)
+        while flag:
+        
+            self.count_lv(self.plata)
+
+            m_i = self.get_max_lv()
+            print('max_lv_index:', m_i)
+            x_v = (1/self.p_sums[m_i]) * self.get_q_elem_x(m_i)
+            y_v = (1/self.p_sums[m_i]) * self.get_q_elem_y(m_i)
+            print('x_v=', x_v, 'y_v=', y_v)
+            cord_max_lv = list(self.get_index_in_plata(m_i))
+            x_offset = cord_max_lv[1] + x_v
+            y_offset = cord_max_lv[0] + y_v
+            list_to_swap = self.get_list_to_swap([y_offset, x_offset], cord_max_lv)
+            print('list_to_swap',list_to_swap)
+            delta_l = [0] * len(list_to_swap)
+            for index, swap in enumerate(list_to_swap):
+                new_plata = []
+                for pl in self.plata:
+                    new_plata_row = []
+                    for p in pl:
+                        new_plata_row.append(p)
+                    new_plata.append(new_plata_row)
+                l_from_old = self.lv[self.plata[cord_max_lv[0]][cord_max_lv[1]]]
+                l_to_old = self.lv[self.plata[swap[0]][swap[1]]]
+                new_plata[cord_max_lv[0]][cord_max_lv[1]], new_plata[swap[0]][swap[1]] = new_plata[swap[0]][swap[1]], new_plata[cord_max_lv[0]][cord_max_lv[1]]
+                self.count_lv(plata = new_plata, s='new')
+                l_from_new = self.lv[self.plata[cord_max_lv[0]][cord_max_lv[1]]] 
+                l_to_new = self.lv[self.plata[cord_max_lv[0]][cord_max_lv[1]]]
+                delta_l[index] = (l_from_old + l_to_old) - l_from_new - l_to_new
+                self.count_lv(self.plata)
+            max_delta_l = max(delta_l)
+            max_delta_l_index = delta_l.index(max_delta_l)
+            print('delta_l:', delta_l)
+            if max_delta_l > 0:
+                swap = list_to_swap[max_delta_l_index]
+                print('swap', cord_max_lv, 'to', swap)
+                print('swap', self.plata[cord_max_lv[0]][cord_max_lv[1]], 'to', self.plata[swap[0]][swap[1]])
+                print('max_delta_l_index:', max_delta_l_index)
+                self.plata[cord_max_lv[0]][cord_max_lv[1]], self.plata[swap[0]][swap[1]] = self.plata[swap[0]][swap[1]], self.plata[cord_max_lv[0]][cord_max_lv[1]]
+            else:
+                flag = False
+
+            for p in self.plata:
+                print(p)
 
 
         

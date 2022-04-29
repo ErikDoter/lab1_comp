@@ -6,7 +6,7 @@ import numpy as np
 from utils import rec
 from copy import copy
 
-FILE = "test20.txt"
+FILE = "test250.txt"
 
 class System:
     matrix: Matrix

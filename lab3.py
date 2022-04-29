@@ -7,7 +7,7 @@ best_container = system.get_best_container()
 
 print(best_container)
 
-FILE = "test20.txt"
+FILE = "test250.txt"
 layout = Step2(FILE, best_container)
 layout.create_containers_matrix()
 layout.print_matrix()
