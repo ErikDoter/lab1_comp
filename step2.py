@@ -1,3 +1,5 @@
+from operator import isub
+from numpy import mat
 from matrix import Matrix
 from pathlib import Path
 from typing import List
@@ -11,6 +13,7 @@ class Step2:
     p_sums: List[int]
     k_arrays: List[List[int]]
     sequence_list: List[int]
+    lv: List[float]
 
 
     def __init__(self, filename, containers):
@@ -21,6 +24,7 @@ class Step2:
         self.p_sums = []
         self.k_arrays = []
         self.sequence_list = []
+        self.lv = [0] * len(self.containers)
 
     def create_containers_matrix(self):
         self.matrix = []
@@ -75,26 +79,6 @@ class Step2:
                 stars.append(i)
         self.rec_k(stars)
 
-    def run(self):
-        self.rec_k([0])
-        print('_________K_______')
-        for a in self.k_arrays:
-            print(a)
-        print('sequence = ', self.sequence_list)
-
-        flag = True
-        for index_row, row in enumerate(self.plata):
-            if flag:
-                for index_col in range(len(self.plata)):
-                    self.plata[index_row][index_col] = self.sequence_list.pop(0)
-                flag = False
-            else:
-                for index_col in reversed(range(len(self.plata))):
-                    self.plata[index_row][index_col] = self.sequence_list.pop(0)
-                flag = True
-
-        for p in self.plata:
-            print(p)
 
     def get_q(self):
         q = 0
@@ -118,6 +102,85 @@ class Step2:
                 s = math.fabs(x_coord1 - x_coord2) + math.fabs(y_coord1 - y_coord2)
                 q += s * massa
         return q/2
+    
+    def get_index_in_plata(self, elem: int): #координаты на плате
+        for i, x in enumerate(self.plata):
+            if elem in x:
+                return (i, x.index(elem))
+
+    def get_q_elem(self, elem: int): #считает q для элемента
+        x, y = self.get_index_in_plata(elem=elem)
+        sum_q_for_el = 0
+        for i, row in enumerate(self.plata):
+            for j, col in enumerate(row): 
+                        s = math.fabs(x-j) + math.fabs(y-i)
+                        sum_q_for_el += self.matrix[col][elem] * s
+
+        return sum_q_for_el
+
+    def get_q_elem_x(self, elem: int): #считает q для расстояний по x
+        x, y = self.get_index_in_plata(elem=elem)
+        sum_q_for_el = 0
+        for i, row in enumerate(self.plata):
+            for j, col in enumerate(row):
+                        s = math.fabs(x-j)
+                        sum_q_for_el += self.matrix[col][elem] * s
+
+        return sum_q_for_el
+
+    
+    def get_q_elem_y(self, elem: int): #считает q для расстояний по y
+        x, y = self.get_index_in_plata(elem=elem)
+        sum_q_for_el = 0
+        for i, row in enumerate(self.plata):
+            for j, col in enumerate(row):
+                        s = math.fabs(y-i)
+                        sum_q_for_el += self.matrix[col][elem] * s
+
+        return sum_q_for_el
+        
+    
+    def count_lv(self): #счтает lv для всез элементов
+        for i, row in enumerate(self.plata):
+            for j, col in enumerate(row):
+                self.lv[col] = (1/self.p_sums[col]) * self.get_q_elem(col)
+        print('lv:', self.lv)
+
+    def get_max_lv(self):
+        m = max(self.lv)
+        m_i = self.lv.index(m)
+        return m_i
+    
+    def run(self):
+        self.rec_k([0])
+        print('_________K_______')
+        for a in self.k_arrays:
+            print(a)
+        print('sequence = ', self.sequence_list)
+
+        flag = True
+        for index_row, row in enumerate(self.plata):
+            if flag:
+                for index_col in range(len(self.plata)):
+                    self.plata[index_row][index_col] = self.sequence_list.pop(0)
+                flag = False
+            else:
+                for index_col in reversed(range(len(self.plata))):
+                    self.plata[index_row][index_col] = self.sequence_list.pop(0)
+                flag = True
+
+        for p in self.plata:
+            print(p)
+        
+        self.count_lv()
+
+        m_i = self.get_max_lv()
+        print('max_lv_index:', m_i)
+        x_v = (1/self.p_sums[m_i]) * self.get_q_elem_x(m_i)
+        y_v = (1/self.p_sums[m_i]) * self.get_q_elem_y(m_i)
+        print('x_v=', x_v, 'y_v=', y_v)
+
+        
 
 
 
