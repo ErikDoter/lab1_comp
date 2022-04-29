@@ -123,7 +123,7 @@ class Step2:
         sum_q_for_el = 0
         for i, row in enumerate(self.plata):
             for j, col in enumerate(row):
-                        s = math.fabs(x-j)
+                        s = j - x
                         sum_q_for_el += self.matrix[col][elem] * s
 
         return sum_q_for_el
@@ -134,7 +134,7 @@ class Step2:
         sum_q_for_el = 0
         for i, row in enumerate(self.plata):
             for j, col in enumerate(row):
-                        s = math.fabs(y-i)
+                        s = i - y
                         sum_q_for_el += self.matrix[col][elem] * s
 
         return sum_q_for_el
@@ -150,6 +150,32 @@ class Step2:
         m = max(self.lv)
         m_i = self.lv.index(m)
         return m_i
+
+    def compare_list(self, a, b):
+        if len(a) != len(b):
+            return False
+        for i1, _ in enumerate(a):
+            if a[i1] != b[i1]:
+                return False
+        return True
+
+    def get_list_to_swap(self, coords: list, ignore):
+        res = []
+        res.append([math.ceil(coords[0]), math.ceil(coords[1])])
+        res.append([math.ceil(coords[0]), math.floor(coords[1])])
+        res.append([math.floor(coords[0]), math.ceil(coords[1])])
+        res.append([math.floor(coords[0]), math.floor(coords[1])])
+        res.append([0,0])
+        for i1, r1 in enumerate(res):
+            for i2 in range(i1+1, len(res)):
+                if self.compare_list(res[i1], res[i2]):
+                    res.pop(i2)
+        for i, element in enumerate(res):
+            if element[0] == ignore[0] and element[1] == ignore[1]:
+                res.pop(i)
+        return res
+
+
     
     def run(self):
         self.rec_k([0])
@@ -179,6 +205,12 @@ class Step2:
         x_v = (1/self.p_sums[m_i]) * self.get_q_elem_x(m_i)
         y_v = (1/self.p_sums[m_i]) * self.get_q_elem_y(m_i)
         print('x_v=', x_v, 'y_v=', y_v)
+        cord_max_lv = list(self.get_index_in_plata(m_i))
+        x_offset = cord_max_lv[1] + x_v
+        y_offset = cord_max_lv[0] + y_v
+        list_to_swap = self.get_list_to_swap([y_offset, x_offset], cord_max_lv)
+        print(list_to_swap)
+
 
         
 
